@@ -1,0 +1,120 @@
+:root{
+  --bg: #f6f7fb;
+  --panel: rgba(255,255,255,0.92);
+  --panel2: rgba(255,255,255,0.98);
+  --text: rgba(17,24,39,0.95);
+  --muted: rgba(17,24,39,0.68);
+  --line: rgba(17,24,39,0.12);
+  --accent: #2563eb;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif; }
+a { color: var(--accent); }
+
+.label {
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(17,24,39,0.18);
+  white-space: nowrap;
+  user-select: none;
+  color: rgba(17,24,39,0.92);
+}
+
+.axisLabel {
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(17,24,39,0.20);
+  white-space: nowrap;
+  user-select: none;
+  color: rgba(17,24,39,0.90);
+}
+
+.tickLabel{
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(17,24,39,0.88);
+  background: rgba(255,255,255,0.86);
+  border: 1px solid rgba(17,24,39,0.10);
+  border-radius: 8px;
+  padding: 2px 6px;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.85);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.badge-dot{
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  background: currentColor;
+  opacity: .9;
+}
+
+button, select, input[type="range"] {
+  font: inherit;
+}
+
+select, input[type="range"], input[type="checkbox"]{
+  accent-color: var(--accent);
+}
+
+
+/* Axis color hints */
+.axisLabel.axisX { border-color: rgba(37,99,235,0.40); box-shadow: 0 6px 16px rgba(37,99,235,0.10); }
+.axisLabel.axisY { border-color: rgba(5,150,105,0.40); box-shadow: 0 6px 16px rgba(5,150,105,0.10); }
+.axisLabel.axisZ { border-color: rgba(217,119,6,0.40); box-shadow: 0 6px 16px rgba(217,119,6,0.10); }
+
+.detailsTitle{ font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+.detailsMeta{ font-size: 13px; color: rgba(17,24,39,0.70); margin-bottom: 10px; }
+.detailsDesc{ font-size: 14px; margin: 0 0 12px 0; }
+.pill{
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(17,24,39,0.06);
+  border: 1px solid rgba(17,24,39,0.12);
+}
+.detailsGrid{ margin-top: 8px; }
+.detailsGridHead{ font-size: 13px; font-weight: 800; margin-bottom: 8px; color: rgba(17,24,39,0.80); }
+.dimRow{
+  display: grid;
+  grid-template-columns: 28px 1fr 60px 1.6fr;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(17,24,39,0.10);
+  background: rgba(255,255,255,0.72);
+  margin-bottom: 8px;
+}
+.dimAxis{
+  text-align: center;
+  font-weight: 900;
+  border-radius: 10px;
+  padding: 4px 0;
+  background: rgba(17,24,39,0.06);
+  border: 1px solid rgba(17,24,39,0.10);
+}
+.dimVal{ text-align: right; font-weight: 900; }
+.dimNote{ color: rgba(17,24,39,0.72); font-size: 13px; }
+.detailsHint{ font-size: 12px; color: rgba(17,24,39,0.62); margin-top: 8px; }
+

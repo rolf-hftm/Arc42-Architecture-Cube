@@ -1,0 +1,76 @@
+############################################
+# macOS
+############################################
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+############################################
+# IntelliJ IDEA / WebStorm (JetBrains)
+############################################
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+.idea_modules/
+
+############################################
+# Node / Angular
+############################################
+node_modules/
+dist/
+out-tsc/
+tmp/
+temp/
+.cache/
+.npm/
+.angular/
+.angular/cache/
+
+############################################
+# pnpm
+############################################
+pnpm-debug.log*
+# pnpm store is usually global; if you configured a local store, ignore it:
+.pnpm-store/
+
+############################################
+# Logs
+############################################
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+############################################
+# Env files / secrets
+############################################
+.env
+.env.*
+!.env.example
+
+############################################
+# Build / coverage / test artifacts
+############################################
+coverage/
+*.lcov
+reports/
+junit.xml
+
+############################################
+# TypeScript incremental build info
+############################################
+*.tsbuildinfo
+
+############################################
+# Editor / tooling
+############################################
+.vscode/
+*.swp
+*.swo

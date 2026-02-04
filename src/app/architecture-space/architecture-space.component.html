@@ -1,0 +1,311 @@
+<div class="page">
+  <header class="header">
+    <div class="title">
+      <div class="h1">Arc42 Architecture Space (3D)</div>
+      <div class="subtitle">Interactive map of architectural approaches across multiple dimensions </div>
+    </div>
+    <div class="headerActions">
+    <button type="button" class="btn" (click)="openAbout()">About</button>
+  </div>
+</header>
+
+  <div class="content">
+    <div class="viewport" #viewport>
+      <!-- Three.js canvas + CSS2D label overlay are injected here -->
+      <div class="hint">
+        Drag to rotate · Wheel to zoom · Right-click drag to pan · Click a point for details · Click empty space to clear
+      </div>
+    </div>
+
+    <aside class="panel">
+      <section class="card">
+        <div class="cardTitle">Axes </div>
+
+        <div class="row">
+          <label>X</label>
+          <select [(ngModel)]="axisX" (ngModelChange)="onAxisChange()">
+            <option *ngFor="let d of enabledDimensionsList" [ngValue]="d.key">{{ d.label }}</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label>Y</label>
+          <select [(ngModel)]="axisY" (ngModelChange)="onAxisChange()">
+            <option *ngFor="let d of enabledDimensionsList" [ngValue]="d.key">{{ d.label }}</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label>Z</label>
+          <select [(ngModel)]="axisZ" (ngModelChange)="onAxisChange()">
+            <option *ngFor="let d of enabledDimensionsList" [ngValue]="d.key">{{ d.label }}</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label>Point size</label>
+          <select [(ngModel)]="sizeDimension" (ngModelChange)="onAxisChange()">
+            <option *ngFor="let d of enabledDimensionsList" [ngValue]="d.key">{{ d.label }}</option>
+          </select>
+        </div>
+<div class="row">
+  <label>Point labels</label>
+  <select [(ngModel)]="pointLabelMode" (ngModelChange)="applyMappingAndFilters()">
+    <option [ngValue]="'hover'">Hover only</option>
+    <option [ngValue]="'selected'">Selected only</option>
+    <option [ngValue]="'hover+selected'">Hover + selected</option>
+    <option [ngValue]="'all'">All</option>
+    <option [ngValue]="'off'">Off</option>
+  </select>
+</div>
+
+<div class="row">
+  <label>Tick labels</label>
+  <select [(ngModel)]="tickLabelMode" (ngModelChange)="applyMappingAndFilters()">
+    <option [ngValue]="'endpoints'">0 / 50 / 100</option>
+    <option [ngValue]="'all'">All ticks</option>
+    <option [ngValue]="'none'">None</option>
+  </select>
+</div>
+
+<div class="row">
+  <label>Scene scale</label>
+  <input type="range" min="10" max="40" step="1" [(ngModel)]="scale" (ngModelChange)="applyMappingAndFilters()"/>
+  <span class="mono">{{ scale }}</span>
+</div>
+
+<div class="row">
+  <label>
+    <input type="checkbox" [(ngModel)]="showCubeFaces" (ngModelChange)="applyMappingAndFilters()"/>
+    Cube faces
+  </label>
+</div>
+
+<div class="row" [class.disabled]="!showCubeFaces">
+  <label>Face opacity</label>
+  <input type="range" min="0" max="0.30" step="0.01" [(ngModel)]="cubeFaceOpacity" (ngModelChange)="applyMappingAndFilters()" [disabled]="!showCubeFaces"/>
+  <span class="mono">{{ cubeFaceOpacity }}</span>
+</div>
+
+<div class="row" [class.disabled]="!showCubeFaces">
+  <label>
+    <input type="checkbox" [(ngModel)]="showInnerGrid" (ngModelChange)="applyMappingAndFilters()" [disabled]="!showCubeFaces"/>
+    Inner grid (8)
+  </label>
+</div>
+
+<div class="row" [class.disabled]="!showCubeFaces || !showInnerGrid">
+  <label>Grid opacity</label>
+  <input type="range" min="0" max="0.20" step="0.01" [(ngModel)]="innerGridOpacity" (ngModelChange)="applyMappingAndFilters()" [disabled]="!showCubeFaces || !showInnerGrid"/>
+  <span class="mono">{{ innerGridOpacity }}</span>
+</div>
+
+<div class="row">
+  <label>
+    <input type="checkbox" [(ngModel)]="showClusters" (ngModelChange)="applyMappingAndFilters()"/>
+    Cluster outlines
+  </label>
+</div>
+
+<div class="row">
+  <label>View</label>
+  <button type="button" class="btn" (click)="resetView()">Reset camera</button>
+</div>
+
+<div class="row">
+  <label>
+    <input type="checkbox" [(ngModel)]="autoRotate" (ngModelChange)="applyViewSettings()"/>
+    Auto rotate
+  </label>
+</div>
+
+<div class="row" [class.disabled]="!autoRotate">
+  <label>Rotate speed</label>
+  <input type="range" min="0.1" max="2.0" step="0.1" [(ngModel)]="autoRotateSpeed" (ngModelChange)="applyViewSettings()" [disabled]="!autoRotate"/>
+  <span class="mono">{{ autoRotateSpeed }}</span>
+</div>
+
+      </section>
+
+<section class="card">
+  <div class="cardTitle">Dimension filter</div>
+  <div class="muted smallText">
+    Disable dimensions to remove them from the axis/size selectors (useful to “focus” the model). Re‑enable them to add them back.
+  </div>
+
+  <div class="dimGrid">
+    <label class="dimCheck" *ngFor="let d of dimensions">
+      <input type="checkbox" [(ngModel)]="dimensionEnabled[d.key]" (ngModelChange)="onDimensionToggle()"/>
+      <span class="mono">{{ d.label }}</span>
+    </label>
+  </div>
+</section>
+
+<section class="card">
+  <div class="cardTitle">Approach filter</div>
+
+  <div class="row3">
+    <button type="button" class="btn" (click)="setAllApproaches(true)">All on</button>
+    <button type="button" class="btn" (click)="setAllApproaches(false)">All off</button>
+  </div>
+
+  <div class="approachGroups">
+    <div class="approachGroup" *ngFor="let c of categories">
+      <div class="approachGroupHead">
+        <div class="badge">
+          <span class="badge-dot" [style.color]="c.color"></span>
+          {{ c.label }}
+        </div>
+        <div class="groupBtns">
+          <button type="button" class="btn btnSmall" (click)="setApproachesForCategory(c.key, true)">On</button>
+          <button type="button" class="btn btnSmall" (click)="setApproachesForCategory(c.key, false)">Off</button>
+        </div>
+      </div>
+
+      <label class="check approachCheck" *ngFor="let a of approachesForCategory(c.key)">
+        <input type="checkbox" [(ngModel)]="approachEnabled[a.id]" (ngModelChange)="applyMappingAndFilters()"/>
+        <span class="mono">{{ a.name }}</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="muted smallText">
+    Tip: keep <span class="mono">Point size</span> set to <span class="mono">Coupling</span> to see the 4th dimension more clearly.
+  </div>
+</section>
+
+      <section class="card">
+        <div class="cardTitle">Category filter</div>
+
+        <label class="check" *ngFor="let c of categories">
+          <input type="checkbox" [(ngModel)]="categoryEnabled[c.key]" (ngModelChange)="applyMappingAndFilters()"/>
+          <span class="badge">
+            <span class="badge-dot" [style.color]="c.color"></span>
+            {{ c.label }}
+          </span>
+        </label>
+      </section>
+
+      <section class="card" *ngIf="selected">
+  <div class="cardTitle">Selected</div>
+
+  <div class="selName">{{ selected.name }}</div>
+  <div class="selCat">
+    Category:
+    <span class="pill"
+          [class.structural]="selected.category === 'structural'"
+          [class.strategic]="selected.category === 'strategic'"
+          [class.deployment]="selected.category === 'deployment'">{{ selected.category }}</span>
+  </div>
+
+  <div class="selDesc">{{ selected.description }}</div>
+  <a class="moreLink" *ngIf="selected.url" [href]="selected.url" target="_blank" rel="noopener">Read more</a>
+
+  <div class="dimsBox">
+    <div class="dimsTitle">Position in the cube</div>
+    <div class="dimRow">
+      <span class="axisPill axisX">X</span>
+      <span class="dimLabel">{{ labelOf(axisX) }}</span>
+      <span class="dimVal">{{ selected.values[axisX] }}</span>
+    </div>
+    <div class="dimRow">
+      <span class="axisPill axisY">Y</span>
+      <span class="dimLabel">{{ labelOf(axisY) }}</span>
+      <span class="dimVal">{{ selected.values[axisY] }}</span>
+    </div>
+    <div class="dimRow">
+      <span class="axisPill axisZ">Z</span>
+      <span class="dimLabel">{{ labelOf(axisZ) }}</span>
+      <span class="dimVal">{{ selected.values[axisZ] }}</span>
+    </div>
+    <div class="dimRow">
+      <span class="axisPill axisS">S</span>
+      <span class="dimLabel">{{ labelOf(sizeDimension) }}</span>
+      <span class="dimVal">{{ selected.values[sizeDimension] }}</span>
+    </div>
+  </div>
+
+  <div class="hint small">Tip: hover to preview the label, click to pin details here.</div>
+</section>
+
+      <section class="card">
+        <div class="cardTitle">Legend </div>
+        <ul class="legend">
+          <li><span class="mono">Structure</span>: rigid layered → inside‑out / ports & adapters</li>
+          <li><span class="mono">Granularity</span>: monolith → many independently deployable units</li>
+          <li><span class="mono">Focus</span>: technology‑driven → domain‑driven</li>
+          <li><span class="mono">Coupling</span>: low coupling → high coupling</li>
+        </ul>
+      </section>
+
+      <section class="card small">
+        <div class="cardTitle">Dataset</div>
+        <div class="muted">
+          Edit <span class="mono">approaches</span> in
+          <span class="mono">architecture-space.component.ts</span>
+          to adjust values, add approaches, or change categories.
+        </div>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<!-- About modal -->
+<div class="modalBackdrop" *ngIf="showAbout" (click)="closeAbout()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modalHead">
+      <div class="modalTitle">About: Arc42 Architecture Space (3D)</div>
+      <button type="button" class="btn btnSmall" (click)="closeAbout()">Close</button>
+    </div>
+
+    <div class="modalBody">
+      <p>
+        As a participant in this <span class="mono">arc42</span> “Software Architecture” course, you will meet many
+        architectural terms (patterns, styles, approaches). This 3D cube is a <b>discussion tool</b> that helps you
+        <b>place</b> those terms in a shared mental model — so the concepts become easier to compare, remember, and explain.
+      </p>
+
+      <p>
+        Important: the cube does <b>not</b> claim to be “scientifically correct”. The numbers are a
+        <b>teaching approximation</b> to trigger meaningful conversations about <b>trade-offs</b>.
+        Click a point to see a short explanation and a link for deeper reading on the right-hand side.
+      </p>
+
+      <p>
+        We map <span class="mono">three</span> dimensions to the X/Y/Z axes and encode the <span class="mono">fourth</span>
+        dimension as <b>point size</b> (default: Coupling).
+      </p>
+
+      <ul>
+        <li><b>Structure</b>: layered / hierarchical → inside-out (ports & adapters)</li>
+        <li><b>Granularity</b>: monolith → many independently deployable units</li>
+        <li><b>Focus</b>: technology-driven → domain-driven</li>
+        <li><b>Coupling</b>: low coupling → high coupling (bigger point = higher value)</li>
+      </ul>
+
+      <p><b>How to use this cube during the course</b></p>
+      <ol>
+        <li>Pick axes that match the topic you are currently discussing (e.g., “Structure vs. Granularity vs. Focus”).</li>
+        <li>Use filters to reduce noise (categories, individual approaches, or dimensions).</li>
+        <li>Click two or three approaches and compare them: “Why are they different?” “What do we gain or lose?”</li>
+        <li>Relate what you see back to <span class="mono">arc42</span> thinking: context, building blocks, runtime, deployment, crosscutting concerns.</li>
+      </ol>
+
+      <p><b>Questions you can ask yourself</b></p>
+      <ul>
+        <li>Where would <b>our current system</b> roughly be located in this cube — and why?</li>
+        <li>Which axis is our biggest pain today (structure, granularity, focus, coupling) — and what causes it?</li>
+        <li>What are our main <b>quality drivers</b> (e.g., maintainability, scalability, time-to-market, reliability)?</li>
+        <li>Which trade-off are we consciously accepting — and which one is accidental?</li>
+        <li>If we move toward “more distributed” (granularity), what new coupling appears (operations, contracts, data)?</li>
+        <li>What is a realistic next step for our context (e.g., Modular Monolith before Microservices)?</li>
+      </ul>
+
+      <div class="muted">
+        Tip: if you want to tweak the positions or add more terms, edit the dataset in
+        <span class="mono">architecture-space.component.ts</span>.
+        See <span class="mono">README.md</span> in the project root for details.
+      </div>
+    </div>
+  </div>
+</div>
