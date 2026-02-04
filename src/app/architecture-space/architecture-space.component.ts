@@ -212,11 +212,29 @@ private sizeForced = false;
     {
       id: 'cqrs',
       name: 'CQRS',
-      category: 'deployment',
+      category: 'structural',
       description:
-        'Separates command (write) and query (read) responsibilities, often with different models and storage. Useful when read/write needs diverge; commonly paired with events and eventual consistency.',
+        'Separates command (write) and query (read) responsibilities, often with different models and storage. While technically a pattern, it significantly impacts the structural focus of an application.',
       url: 'https://martinfowler.com/bliki/CQRS.html',
       values: { structure: 70, granularity: 55, focus: 75, coupling: 30 },
+    },
+    {
+      id: 'event-sourcing',
+      name: 'Event Sourcing',
+      category: 'structural',
+      description:
+        'Captures all changes to an application state as a sequence of events. Instead of storing current state, it stores the history of events, enabling audit logs, time-travel, and high decoupling.',
+      url: 'https://martinfowler.com/eaaDev/EventSourcing.html',
+      values: { structure: 75, granularity: 60, focus: 80, coupling: 20 },
+    },
+    {
+      id: 'saga',
+      name: 'Saga Pattern',
+      category: 'structural',
+      description:
+        'Manages distributed transactions by using a sequence of local transactions, each updating its own database and publishing an event or message to trigger the next transaction.',
+      url: 'https://microservices.io/patterns/data/saga.html',
+      values: { structure: 65, granularity: 80, focus: 70, coupling: 35 },
     },
     {
       id: 'soa',
@@ -236,25 +254,51 @@ private sizeForced = false;
       url: 'https://en.wikipedia.org/wiki/Serverless_computing',
       values: { structure: 50, granularity: 100, focus: 45, coupling: 25 },
     },
-
-{
-  id: 'pipe-filter',
-  name: 'Pipe & Filter',
-  category: 'structural',
-  description:
-    'A processing pipeline where data flows through a chain of independent transformation steps (filters). Excellent for ETL, compilers, and streaming — each step stays focused and replaceable.',
-  url: 'https://en.wikipedia.org/wiki/Pipeline_(software)',
-  values: { structure: 70, granularity: 45, focus: 35, coupling: 30 },
-},
-{
-  id: 'broker',
-  name: 'Broker',
-  category: 'structural',
-  description:
-    'An intermediary (“broker”) decouples clients from servers by routing requests and responses. This adds indirection to reduce coupling and enable distribution, but introduces its own runtime dependency.',
-  url: 'https://en.wikipedia.org/wiki/Broker_pattern',
-  values: { structure: 65, granularity: 70, focus: 40, coupling: 35 },
-},
+    {
+      id: 'pipe-filter',
+      name: 'Pipe & Filter',
+      category: 'structural',
+      description:
+        'A processing pipeline where data flows through a chain of independent transformation steps (filters). Excellent for ETL, compilers, and streaming — each step stays focused and replaceable.',
+      url: 'https://en.wikipedia.org/wiki/Pipeline_(software)',
+      values: { structure: 70, granularity: 45, focus: 35, coupling: 30 },
+    },
+    {
+      id: 'clean-architecture',
+      name: 'Clean Architecture',
+      category: 'structural',
+      description:
+        'A variation of Onion/Hexagonal architecture by Robert C. Martin. It emphasizes dependency inversion and strict boundaries to keep the core business logic independent of frameworks and UI.',
+      url: 'https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html',
+      values: { structure: 90, granularity: 20, focus: 80, coupling: 15 },
+    },
+    {
+      id: 'data-mesh',
+      name: 'Data Mesh',
+      category: 'strategic',
+      description:
+        'A decentralized architectural framework for data management. It treats data as a product and shifts ownership to domain-aligned teams, applying microservices principles to the data world.',
+      url: 'https://martinfowler.com/articles/data-mesh-principles.html',
+      values: { structure: 60, granularity: 85, focus: 90, coupling: 40 },
+    },
+    {
+      id: 'p2p',
+      name: 'Peer-to-Peer',
+      category: 'deployment',
+      description:
+        'A decentralized network where participants (peers) are equally privileged and share resources directly without a central server. Highly resilient but complex to coordinate.',
+      url: 'https://en.wikipedia.org/wiki/Peer-to-peer',
+      values: { structure: 30, granularity: 100, focus: 20, coupling: 10 },
+    },
+    {
+      id: 'blackboard',
+      name: 'Blackboard',
+      category: 'structural',
+      description:
+        'Specialized architectural style for problems with no deterministic solution. Multiple independent "experts" (knowledge sources) work on a shared data store (blackboard) to build a solution.',
+      url: 'https://en.wikipedia.org/wiki/Blackboard_system',
+      values: { structure: 40, granularity: 50, focus: 30, coupling: 40 },
+    },
 
   ];
 

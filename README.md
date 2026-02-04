@@ -4,6 +4,20 @@
 
 This is a small Angular + Three.js demo that helps you discuss architectural approaches in an **arc42** / software-architecture course.
 
+### What this cube shows
+
+The "Architecture Space" cube is a didactic tool to make software architecture styles and patterns visually comparable. Instead of talking about architecture only in theory, different approaches are placed in a multi-dimensional coordinate system so you can discuss trade-offs.
+
+- Axes (X, Y, Z): Each axis represents a property on a 0..100 scale. By default:
+  - X (Structure): from rigid layered to domain-centric boundaries (ports & adapters / hexagonal)
+  - Y (Granularity): from coarse-grained monoliths to fine-grained, independently deployable units (microservices)
+  - Z (Focus): from technology-driven to domain-driven (DDD)
+- Points (spheres): Each point represents a specific architectural approach; its position encodes the combination of the three properties. Color indicates category (structural, strategic, deployment).
+- 4th dimension (point size): Sphere size encodes Coupling. Small = loosely coupled, large = tightly coupled.
+- Goal: Provide a basis to discuss trade-offs. Values are didactic estimates, not scientific facts; they are meant to be challenged and adapted during a course.
+
+Important note on the dataset: In addition to holistic architecture styles, the dataset intentionally includes individual patterns (e.g., Saga, Event Sourcing, etc.). While such patterns are not full architectures, placing them in the same space helps contrast their characteristics with architectural styles, reveal interactions and trade-offs, and provide concrete anchors for classroom discussion. This deliberate inclusion broadens comparison and fosters critical thinking about where and how a pattern shifts structure, granularity, focus, or coupling.
+
 The image above shows the interactive 3D space where various architectural patterns are mapped as spheres within a coordinate system, allowing for visual comparison of their characteristics.
 
 The idea: place approaches (Monolith, Modular Monolith, Layered, Hexagonal, DDD, Microservices, Pipe & Filter, Broker, …) into a **multi-dimensional space** so you can talk about trade-offs and relationships.
@@ -53,7 +67,7 @@ In this demo:
 * toggle **categories**
 * toggle **individual approaches**
 
-4. Ask participants to challenge values: *“Where would you move CQRS? Why?”*
+4. Ask participants to challenge values: *“Where would you move Event Sourcing? Why?”*
    Then change the numbers live in the dataset.
 
 ## Run
