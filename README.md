@@ -50,8 +50,9 @@ In this demo:
 2. Explain the current axis mapping (X/Y/Z) and what **point size** means.
 3. Use the filters to reduce noise:
 
-  * toggle **categories**
-  * toggle **individual approaches**
+* toggle **categories**
+* toggle **individual approaches**
+
 4. Ask participants to challenge values: *“Where would you move CQRS? Why?”*
    Then change the numbers live in the dataset.
 
@@ -81,6 +82,49 @@ To stop the container:
 ```bash
 docker compose -f docker/compose.yml down
 ```
+
+### Docker Hub (pull and run without building)
+
+If you do **not** want to build the image locally, you can pull the prebuilt image from Docker Hub and run it directly.
+
+> The container exposes the application on internal port **80**.
+
+#### 1) Pull the image
+
+```bash
+docker pull jfr1/arc42-architecture-cube:latest
+```
+
+(Optional: use an explicit version tag)
+
+```bash
+docker pull jfr1/arc42-architecture-cube:1.0.0
+```
+
+#### 2) Run the container
+
+Map a local port (e.g. **8080**) to the container’s port **80**:
+
+```bash
+docker run --rm -d \
+  --name arc42-architecture-cube \
+  -p 8080:80 \
+  jfr1/arc42-architecture-cube:latest
+```
+
+Open: [http://localhost:8080](http://localhost:8080)
+
+#### 3) Stop the container
+
+If you started it with `-d` (detached mode):
+
+```bash
+docker stop arc42-architecture-cube
+```
+
+#### Notes (multi-arch)
+
+The Docker Hub image is published as a multi-architecture image. Docker will automatically pull the correct variant for your system (e.g. **linux/amd64** on typical Linux servers and **linux/arm64** on Apple Silicon).
 
 ## Customize the dataset
 
@@ -122,6 +166,4 @@ Each approach can optionally define a `url` field. When present, the right-side 
 
 ## License
 
-MIT - Author: Rolf Jufer (rolf.jufer@hftm.ch)
-
-
+MIT - Author: Rolf Jufer ([rolf.jufer@hftm.ch](mailto:rolf.jufer@hftm.ch))
